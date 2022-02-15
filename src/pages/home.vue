@@ -15,16 +15,45 @@ export default {
   },
   data () {
     return {
-      notes: ['task 1', 'task 2', 'task 3']
+      notes: [
+        {
+          title: 'Learn Vue 3',
+          tags: ['work']
+        },
+        {
+          title: 'Finish course',
+          tags: ['work', 'home']
+        }
+      ]
     }
   },
+  mounted() {
+    this.getNotes()
+  },
   methods: {
-    handleSubmit(note) {
+    handleSubmit(title) {
+      const note = {
+        title: title,
+        tags: []
+      }
       this.notes.push(note)
-      console.log(note)
     },
     handleRemove(index) {
       this.notes.splice(index, 1)
+    },
+    getNotes() {
+      const localNotes = localStorage.getItem("notes");
+      if (localNotes) {
+        this.notes = JSON.parse(localNotes)
+      }
+    }
+  },
+  watch: {
+    notes: {
+      handler(updateList) {
+        localStorage.setItem('notes', JSON.stringify(updateList))
+      },
+      deep: true
     }
   }
 }
